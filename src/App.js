@@ -13,7 +13,7 @@ const App = () => {
       id: 'e0',
       title: 'Bayraktar',
       amount: "15.000.000",
-      date: new Date(2022, 6, 22)
+      date: new Date(2022, 5, 22)
     },
     {
       id: 'e1',
