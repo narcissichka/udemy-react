@@ -11,21 +11,14 @@ const selectYear = (setYear, value) => {
 }
 
 export const Expenses = ({ expenses }) => {
-    const [yearToFilter, setYearToFilter] = useState('');
-    const expensesList = [];
-
-    console.log(yearToFilter);
-
-    expenses.forEach((item) => {
-        expensesList.push(<ExpenseItem key={item.id} title={item.title} amount={item.amount} date={item.date} />);
-    });
+    const [yearToFilter, setYearToFilter] = useState('2022');
 
     return (
-        <div>
-            <ExpensesFilter onSelectYear={selectYear.bind(this, setYearToFilter)}/>
-            <Card className='expenses'>
-                {expensesList}
-            </Card>
-        </div>
+        <Card className='expenses'>
+            <ExpensesFilter selected={yearToFilter} onSelectYear={selectYear.bind(this, setYearToFilter)}/>
+            {expenses.map((expense) =>
+                <ExpenseItem key={expense.id} title={expense.title} amount={expense.amount} date={expense.date} />
+            )}
+        </Card>
     );
 }
