@@ -12,7 +12,13 @@ const inputChangeHandler = (e, setValue, key) => {
   });
 };
 
-const submitHandler = (e, userInput, setUserInput, onSaveData) => {
+const submitHandler = (
+  e,
+  userInput,
+  setUserInput,
+  onSaveData,
+  toggleExpenseForm
+) => {
   e.preventDefault();
 
   onSaveData(userInput);
@@ -21,9 +27,14 @@ const submitHandler = (e, userInput, setUserInput, onSaveData) => {
     amount: '',
     date: ''
   });
+
+  toggleExpenseForm();
 };
 
-export const ExpenseForm = ({ onSaveExpenseData }) => {
+export const ExpenseForm = ({
+  onSaveExpenseData,
+  toggleExpenseFormHandler
+}) => {
   const [userInput, setUserInput] = useState({
     title: '',
     amount: '',
@@ -38,7 +49,14 @@ export const ExpenseForm = ({ onSaveExpenseData }) => {
   );
 
   return (
-    <form onSubmit={handleEvent(submitHandler, userInput, setUserInput, onSaveExpenseData)}>
+    <form
+      onSubmit={handleEvent(
+        submitHandler,
+        userInput,
+        setUserInput,
+        onSaveExpenseData,
+        toggleExpenseFormHandler
+      )}>
       <div className='new-expense__controls'>
         <div className='new-expense__control'>
           <label>Title</label>
@@ -70,8 +88,13 @@ export const ExpenseForm = ({ onSaveExpenseData }) => {
         </div>
       </div>
       <div className='new-expense__actions'>
+        <button type='reset' onClick={toggleExpenseFormHandler}>
+          Cancel
+        </button>
         <button type='submit'>Add Expense</button>
       </div>
     </form>
   );
 };
+
+export default ExpenseForm;
