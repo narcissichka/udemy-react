@@ -5,6 +5,7 @@ import Card from './components/UI/Card';
 import Modal from './components/Modal/Modal';
 import UserInput from './components/UserInput/UserInput';
 import UserList from './components/UserList/UserList';
+import Wrapper from './components/Helper/Wrapper';
 
 import styles from './App.module.css';
 
@@ -42,7 +43,7 @@ export const App = () => {
   const [users, setUsers] = useState([{ id: v4(), username: 'Max', age: 31 }]);
 
   return (
-    <div>
+    <Wrapper>
       {showModal && (
         <Modal
           errors={errorMessage}
@@ -57,7 +58,7 @@ export const App = () => {
       <Card className={styles['user-list']}>
         <UserList users={users}></UserList>
       </Card>
-    </div>
+    </Wrapper>
   );
 };
 
