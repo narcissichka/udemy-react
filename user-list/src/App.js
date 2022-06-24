@@ -43,6 +43,8 @@ export const App = () => {
   const [users, setUsers] = useState([{ id: v4(), username: 'Max', age: 31 }]);
 
   return (
+    // <React.Fragment></React.Fragment>
+    // <></>
     <Wrapper>
       {showModal && (
         <Modal
