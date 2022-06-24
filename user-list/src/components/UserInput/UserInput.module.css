@@ -1,0 +1,46 @@
+.user-input__form {
+  width: 100%;
+  padding: 20px 20px 0 20px;
+}
+
+.user-input__block {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.user-input__label {
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.1em;
+}
+
+.user-input__input {
+  background-color: transparent;
+  padding-inline: 10px;
+  height: 1.5rem;
+  border: 1px solid white;
+  color: white;
+}
+
+.user-input__input:focus,
+.user-input__input:focus-visible {
+  outline-color: rgba(0, 0, 0, 0.2);
+}
+
+.user-input__button {
+  height: 3rem;
+  font-size: 1.5rem;
+  font-weight: 300;
+  width: calc(100% + 40px);
+  font-family: 'Fira Code', monospace;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border: 1px solid white;
+  margin: 20px -20px 0 -20px;
+  transition: 0.2s all ease-out;
+}
+
+.user-input__button:hover {
+  color: white;
+  background-color: transparent;
+}

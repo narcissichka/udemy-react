@@ -1,0 +1,13 @@
+.user-input,
+.user-list {
+  width: 70%;
+  margin: 20px auto;
+}
+
+.user-list {
+    min-height: 50vh;
+}
+
+.user-input{
+    border-bottom: none;
+}
