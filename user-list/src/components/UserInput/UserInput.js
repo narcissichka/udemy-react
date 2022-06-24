@@ -107,12 +107,15 @@ const submitFormHandler = (
 ) => {
   e.preventDefault();
 
-  setInputProperties(initialInputProps);
 
   if (!inputProperties['input__username'] || !inputProperties['input__age']) {
     setShowModal(true);
     return;
   }
+
+  setInputProperties(initialInputProps);
+  refUser.current.value = '';
+  refAge.current.value = '';
 
   setErrorMessage({ emptyFields: 'Fields should not be empty' });
   setUsers({
@@ -120,9 +123,6 @@ const submitFormHandler = (
     username: inputProperties.username,
     age: parseInt(inputProperties.age)
   });
-
-  refUser.current.value = '';
-  refAge.current.value = '';
 };
 
 export const UserInput = ({ setShowModal, setErrorMessage, setUsers }) => {
