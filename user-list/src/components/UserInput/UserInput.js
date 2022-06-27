@@ -1,152 +1,98 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { v4 } from 'uuid';
 
 import { handleEvent } from '../../utils';
-
 import styles from './UserInput.module.css';
 
 const usernameRegex = "(([ ]?[a-z])+([ ]?[a-z]?['-]?[a-z]+)*)$";
-const initialInputProps = {
-  input__username: false,
-  input__age: false,
-  username: '',
-  age: ''
-};
 
-const validation = (condition, input, cb) => {
-  if (condition) {
-    cb((prevState) => {
-      return {
-        ...prevState,
-        [input.id]: false,
-        [input.name]: input.value
-      };
-    });
-
+const validateUsername = (input, setErrorMessage) => {
+  if (!input.value) {
+    setErrorMessage({ emptyUsername: 'Username field should not be empty' });
     return false;
   }
 
-  cb((prevState) => {
-    return {
-      ...prevState,
-      [input.id]: true,
-      [input.name]: input.value
-    };
-  });
-
-  return true;
-};
-
-const validateUsername = (input, setInputProperties, setErrorMessage) => {
-  if (!input.value) {
-    setErrorMessage({ emptyUsername: 'Username field should not be empty' });
-    return;
-  }
-
-  if (
-    !validation(
-      !input.value.match(new RegExp(input.dataset.regex, 'i')),
-      input,
-      setInputProperties
-    )
-  ) {
+  if (!input.value.match(new RegExp(input.dataset.regex, 'i'))) {
     setErrorMessage({
       invalidUsername: 'Username should only contain letters'
     });
-    return;
+    return false;
   }
 
   setErrorMessage(null, ['invalidUsername', 'emptyUsername']);
+  return true;
 };
 
-const validateAge = (input, setInputProperties, setErrorMessage) => {
+const validateAge = (input, setErrorMessage) => {
   if (!input.value) {
     setErrorMessage({ emptyAge: 'Age field should not be empty' });
-    return;
+    return false;
   }
 
-  if (!validation(isNaN(parseInt(input.value)), input, setInputProperties)) {
-    return 'Age value should be a number';
-  } else if (
-    !validation(
-      parseInt(input.value) <= 0 || parseInt(input.value) > 100,
-      input,
-      setInputProperties
-    )
-  ) {
+  if (isNaN(parseInt(input.value))) {
+    setErrorMessage({
+      NaNAge: 'Invalid age value (considered to be a number from 1 to 99 years)'
+    });
+    return false;
+  }
+
+  if (parseInt(input.value) <= 0 || parseInt(input.value) > 100) {
     setErrorMessage({
       invalidAge: 'Invalid age value (considered to be from 1 to 99 years)'
     });
-    return;
+    return false;
   }
 
   setErrorMessage(null, ['emptyAge', 'invalidAge']);
+  return true;
 };
 
-const validateInputHandler = (
-  e,
-  setInputProperties,
-  setErrorMessage,
-  validate
-) => {
-  const input = e.target;
-
+const validateInputHandler = (input, setErrorMessage, validate) => {
   setErrorMessage(null, ['emptyFields']);
-  validate(input, setInputProperties, setErrorMessage);
+  return validate(input, setErrorMessage);
 };
 
 const submitFormHandler = (
   e,
-  inputProperties,
   setShowModal,
   setErrorMessage,
   setUsers,
-  setInputProperties,
   refUser,
   refAge
 ) => {
   e.preventDefault();
 
-
-  if (!inputProperties['input__username'] || !inputProperties['input__age']) {
+  if (
+    !validateInputHandler(refUser.current, setErrorMessage, validateUsername) ||
+    !validateInputHandler(refAge.current, setErrorMessage, validateAge)
+  ) {
     setShowModal(true);
     return;
   }
 
-  setInputProperties(initialInputProps);
-  refUser.current.value = '';
-  refAge.current.value = '';
-
   setErrorMessage({ emptyFields: 'Fields should not be empty' });
   setUsers({
     id: v4(),
-    username: inputProperties.username,
-    age: parseInt(inputProperties.age)
+    username: refUser.current.value,
+    age: parseInt(refAge.current.value)
   });
+
+  refUser.current.value = '';
+  refAge.current.value = '';
 };
 
 export const UserInput = ({ setShowModal, setErrorMessage, setUsers }) => {
-  const [inputProperties, setInputProperties] = useState(initialInputProps);
   const refUser = useRef(null);
   const refAge = useRef(null);
-
-  const inputValidation = handleEvent.bind(
-    this,
-    validateInputHandler,
-    setInputProperties,
-    setErrorMessage
-  );
 
   return (
     <form
       className={styles['user-input__form']}
       onSubmit={handleEvent(
         submitFormHandler,
-        inputProperties,
         setShowModal,
         setErrorMessage,
         setUsers,
-        setInputProperties,
         refUser,
         refAge
       )}>
@@ -162,7 +108,6 @@ export const UserInput = ({ setShowModal, setErrorMessage, setUsers }) => {
           name='username'
           type='text'
           data-regex={usernameRegex}
-          onInput={inputValidation(validateUsername)}
           ref={refUser}
         />
       </div>
@@ -178,7 +123,6 @@ export const UserInput = ({ setShowModal, setErrorMessage, setUsers }) => {
           min='1'
           max='99'
           step='1'
-          onInput={inputValidation(validateAge)}
           ref={refAge}
         />
       </div>

@@ -1,3 +1,4 @@
+import ReactDOM from 'react-dom';
 import styles from './Modal.module.css';
 
 import { handleEvent } from '../../utils';
@@ -6,7 +7,7 @@ const hideModalHandler = (e, setShowModal) => {
   setShowModal(false);
 };
 
-export const Modal = ({ setShowModal, errors }) => {
+const ModalElement = ({ setShowModal, errors }) => {
   return (
     <div className={styles.modal}>
       <div className={`${styles['modal__wrapper']} ${styles['flex']}`}>
@@ -28,4 +29,14 @@ export const Modal = ({ setShowModal, errors }) => {
   );
 };
 
+export const Modal = ({ setShowModal, errors }) => {
+  return (
+    <>
+      {ReactDOM.createPortal(
+        <ModalElement errors={errors} setShowModal={setShowModal} />,
+        document.getElementById('modal-root')
+      )}
+    </>
+  );
+};
 export default Modal;

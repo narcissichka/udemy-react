@@ -49,7 +49,7 @@ export const App = () => {
       {showModal && (
         <Modal
           errors={errorMessage}
-          setShowModal={toggleModal.bind(this, setShowModal)}></Modal>
+          setShowModal={toggleModal.bind(this, setShowModal)}/>
       )}
       <Card className={styles['user-input']}>
         <UserInput
